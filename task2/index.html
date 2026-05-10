@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Grade Calculator</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:linear-gradient(135deg,#4facfe,#00f2fe);
+    }
+
+    .container{
+      width:450px;
+      background:white;
+      padding:30px;
+      border-radius:15px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:20px;
+      color:#333;
+    }
+
+    .input-group{
+      margin-bottom:15px;
+    }
+
+    label{
+      display:block;
+      margin-bottom:5px;
+      font-weight:bold;
+      color:#444;
+    }
+
+    input{
+      width:100%;
+      padding:12px;
+      border:2px solid #ccc;
+      border-radius:8px;
+      font-size:16px;
+      outline:none;
+    }
+
+    input:focus{
+      border-color:#007bff;
+    }
+
+    button{
+      width:100%;
+      padding:12px;
+      margin-top:15px;
+      border:none;
+      border-radius:8px;
+      background:#007bff;
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    button:hover{
+      background:#0056b3;
+    }
+
+    .result{
+      margin-top:20px;
+      padding:15px;
+      border-radius:10px;
+      background:#f4f4f4;
+    }
+
+    .result p{
+      margin:10px 0;
+      font-size:18px;
+      color:#333;
+    }
+
+    .grade{
+      font-size:22px;
+      font-weight:bold;
+      color:green;
+    }
+
+    .error{
+      color:red;
+      margin-top:10px;
+      text-align:center;
+      font-weight:bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🎓 Student Grade Calculator</h1>
+
+    <div class="input-group">
+      <label>Mathematics</label>
+      <input type="number" id="math" placeholder="Enter marks out of 100">
+    </div>
+
+    <div class="input-group">
+      <label>Science</label>
+      <input type="number" id="science" placeholder="Enter marks out of 100">
+    </div>
+
+    <div class="input-group">
+      <label>English</label>
+      <input type="number" id="english" placeholder="Enter marks out of 100">
+    </div>
+
+    <div class="input-group">
+      <label>Computer</label>
+      <input type="number" id="computer" placeholder="Enter marks out of 100">
+    </div>
+
+    <div class="input-group">
+      <label>Social Studies</label>
+      <input type="number" id="social" placeholder="Enter marks out of 100">
+    </div>
+
+    <button onclick="calculateGrade()">Calculate Result</button>
+
+    <div class="error" id="error"></div>
+
+    <div class="result" id="result" style="display:none;">
+      <p><strong>Total Marks:</strong> <span id="totalMarks"></span></p>
+      <p><strong>Average Percentage:</strong> <span id="average"></span>%</p>
+      <p class="grade"><strong>Grade:</strong> <span id="grade"></span></p>
+    </div>
+  </div>
+
+  <script>
+    function calculateGrade() {
+
+      // Get marks from inputs
+      let math = Number(document.getElementById("math").value);
+      let science = Number(document.getElementById("science").value);
+      let english = Number(document.getElementById("english").value);
+      let computer = Number(document.getElementById("computer").value);
+      let social = Number(document.getElementById("social").value);
+
+      let error = document.getElementById("error");
+
+      // Validation
+      let marks = [math, science, english, computer, social];
+
+      for(let i = 0; i < marks.length; i++) {
+        if(marks[i] < 0 || marks[i] > 100 || isNaN(marks[i])) {
+          error.textContent = "❗ Please enter valid marks between 0 and 100.";
+          document.getElementById("result").style.display = "none";
+          return;
+        }
+      }
+
+      error.textContent = "";
+
+      // Calculate total
+      let total = math + science + english + computer + social;
+
+      // Calculate average percentage
+      let average = total / marks.length;
+
+      // Determine grade
+      let grade = "";
+
+      if(average >= 90) {
+        grade = "A+";
+      }
+      else if(average >= 80) {
+        grade = "A";
+      }
+      else if(average >= 70) {
+        grade = "B";
+      }
+      else if(average >= 60) {
+        grade = "C";
+      }
+      else if(average >= 50) {
+        grade = "D";
+      }
+      else {
+        grade = "F";
+      }
+
+      // Display result
+      document.getElementById("totalMarks").textContent = total + " / 500";
+      document.getElementById("average").textContent = average.toFixed(2);
+      document.getElementById("grade").textContent = grade;
+
+      document.getElementById("result").style.display = "block";
+    }
+  </script>
+
+</body>
+</html>

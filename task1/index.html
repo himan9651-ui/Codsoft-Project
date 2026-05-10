@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Number Guessing Game</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:linear-gradient(135deg,#1d2671,#c33764);
+    }
+
+    .container{
+      width:400px;
+      background:#fff;
+      padding:30px;
+      border-radius:15px;
+      text-align:center;
+      box-shadow:0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    h1{
+      margin-bottom:15px;
+      color:#333;
+    }
+
+    p{
+      margin:10px 0;
+      color:#555;
+    }
+
+    input{
+      width:100%;
+      padding:12px;
+      margin-top:15px;
+      border:2px solid #ccc;
+      border-radius:8px;
+      font-size:16px;
+      outline:none;
+    }
+
+    input:focus{
+      border-color:#6a11cb;
+    }
+
+    button{
+      width:100%;
+      padding:12px;
+      margin-top:15px;
+      border:none;
+      border-radius:8px;
+      background:#6a11cb;
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    button:hover{
+      background:#2575fc;
+    }
+
+    .message{
+      margin-top:20px;
+      font-size:18px;
+      font-weight:bold;
+    }
+
+    .score-board{
+      margin-top:20px;
+      background:#f4f4f4;
+      padding:10px;
+      border-radius:10px;
+    }
+
+    .success{
+      color:green;
+    }
+
+    .error{
+      color:red;
+    }
+
+    .info{
+      color:#0077cc;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🎯 Number Guessing Game</h1>
+
+    <p>Guess a number between <strong>1 and 100</strong></p>
+    <p>You have <strong>10 attempts</strong></p>
+
+    <input type="number" id="guessInput" placeholder="Enter your guess" />
+
+    <button onclick="checkGuess()">Submit Guess</button>
+    <button onclick="restartGame()">Play Again</button>
+
+    <div class="message" id="message"></div>
+
+    <div class="score-board">
+      <p>Attempts Left: <span id="attempts">10</span></p>
+      <p>Rounds Won: <span id="wins">0</span></p>
+      <p>Total Score: <span id="score">0</span></p>
+    </div>
+  </div>
+
+  <script>
+    // Game Variables
+    let randomNumber = generateRandomNumber();
+    let attemptsLeft = 10;
+    let wins = 0;
+    let score = 0;
+
+    // Generate Random Number
+    function generateRandomNumber() {
+      return Math.floor(Math.random() * 100) + 1;
+    }
+
+    // Check User Guess
+    function checkGuess() {
+      const guessInput = document.getElementById("guessInput");
+      const message = document.getElementById("message");
+
+      const userGuess = Number(guessInput.value);
+
+      // Validation
+      if (!userGuess || userGuess < 1 || userGuess > 100) {
+        message.textContent = "❗ Please enter a number between 1 and 100.";
+        message.className = "message error";
+        return;
+      }
+
+      // Decrease attempts
+      attemptsLeft--;
+      document.getElementById("attempts").textContent = attemptsLeft;
+
+      // Compare Guess
+      if (userGuess === randomNumber) {
+        message.textContent = `✔️ Correct! The number was ${randomNumber}`;
+        message.className = "message success";
+
+        wins++;
+        score += attemptsLeft + 1;
+
+        updateScoreBoard();
+
+        disableInput();
+      }
+      else if (userGuess > randomNumber) {
+        message.textContent = "📈 Too High! Try Again.";
+        message.className = "message info";
+      }
+      else {
+        message.textContent = "📉 Too Low! Try Again.";
+        message.className = "message info";
+      }
+
+      // Game Over
+      if (attemptsLeft === 0 && userGuess !== randomNumber) {
+        message.textContent = `❌ Game Over! The number was ${randomNumber}`;
+        message.className = "message error";
+
+        disableInput();
+      }
+
+      // Clear input
+      guessInput.value = "";
+    }
+
+    // Disable Input After Win/Loss
+    function disableInput() {
+      document.getElementById("guessInput").disabled = true;
+    }
+
+    // Restart Game
+    function restartGame() {
+      randomNumber = generateRandomNumber();
+      attemptsLeft = 10;
+
+      document.getElementById("attempts").textContent = attemptsLeft;
+      document.getElementById("message").textContent = "";
+
+      const input = document.getElementById("guessInput");
+      input.disabled = false;
+      input.value = "";
+    }
+
+    // Update Scoreboard
+    function updateScoreBoard() {
+      document.getElementById("wins").textContent = wins;
+      document.getElementById("score").textContent = score;
+    }
+  </script>
+
+</body>
+</html>
